@@ -10,7 +10,6 @@ class ColorPicker:
         self.canvas.pack()
         self.canvas.bind('<Button-1>', self.pick_color)
 
-        # Resize image to fit within canvas
         image_width, image_height = self.image.size
         if image_width > 600 or image_height > 600:
             max_size = max(image_width, image_height)
