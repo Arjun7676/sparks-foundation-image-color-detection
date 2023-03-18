@@ -1,0 +1,33 @@
+from PIL import Image, ImageTk
+import tkinter as tk
+
+
+class ColorPicker:
+    def __init__(self, image_path):
+        self.image = Image.open(image_path).convert("RGB")
+        self.root = tk.Tk()
+        self.canvas = tk.Canvas(self.root, width=600, height=600)
+        self.canvas.pack()
+        self.canvas.bind('<Button-1>', self.pick_color)
+
+        # Resize image to fit within canvas
+        image_width, image_height = self.image.size
+        if image_width > 600 or image_height > 600:
+            max_size = max(image_width, image_height)
+            scale_factor = 600 / max_size
+            new_width = int(image_width * scale_factor)
+            new_height = int(image_height * scale_factor)
+            self.image = self.image.resize((new_width, new_height))
+
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
+
+    def pick_color(self, event):
+        x, y = event.x, event.y
+        color = self.image.getpixel((x, y))
+        print(f"Clicked on pixel ({x}, {y}) with color {color}")
+
+
+if __name__ == "__main__":
+    picker = ColorPicker("img.png")
+    picker.root.mainloop()
